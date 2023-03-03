@@ -1,7 +1,7 @@
 import { loginPage } from "../../pageObjects/loginPage"
 
-
 describe('login test scenarios', () => {
+
    beforeEach(() => {
      cy.visit('/')
      loginPage.modalTitle.should('have.text', 'Log in with your existing account')
@@ -9,18 +9,21 @@ describe('login test scenarios', () => {
      loginPage.forgotPass.should('be.visible')
      loginPage.submitBtn.should('have.css', 'background-color', 'rgb(78, 174, 147)')
    })
-    it('login with valid credentials', () => {
-       cy.intercept("POST", Cypress.env("apiUrl")+"/login").as('loginData')
 
-           loginPage.login(Cypress.env("validEmail"), Cypress.env("validPassword"))
+    it('Login with valid credentials', () => {
 
-       cy.wait("@loginData").then( result => {
-           window.localStorage.setItem("token", result.response.token)
-           expect(result.response.statusCode).to.eq(200)
-       })
+        // Intercept the API request for creating a new board
+        cy.intercept("POST", `${Cypress.env('apiUrl')}/login`)
+        .as('loginData')
 
-       cy.url().should('contain', '/my-organizations')
+        // Login and wait for the API response
+        loginPage.login(Cypress.env("validEmail"), Cypress.env("validPassword"))
+
+        cy.wait("@loginData").then( result => {
+            expect(result.response.statusCode).to.eq(200)
+            cy.url().should('contain', '/my-organizations')
+        })
+
    })
-
 
 })

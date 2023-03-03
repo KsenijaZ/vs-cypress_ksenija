@@ -4,7 +4,7 @@ class Constants {
     randomName = faker.name.fullName();
     randomEmail = faker.internet.email();
     randomTitle = faker.lorem.sentence(2)
-    imgUrl = '/home/xeniazl/vs-cypress/cypress/fixtures/logo.webp';
+    imgUrl = 'cypress/fixtures/logo.webp';
 
 }
 

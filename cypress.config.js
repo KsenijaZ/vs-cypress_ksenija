@@ -3,7 +3,7 @@ const { defineConfig } = require("cypress");
 module.exports = defineConfig({
 
     env: {
-      validEmail: 'my@scrum.com',
+      validEmail: 'my01@scrum.com',
       validPassword: 'myPass123',
       apiUrl: 'https://cypress-api.vivifyscrum-stage.com/api/v2'
     },

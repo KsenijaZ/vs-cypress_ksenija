@@ -1,74 +1,47 @@
 import { loginPage } from "../../pageObjects/loginPage"
 import { boards } from "../../pageObjects/boards"
-import { constants } from "../../fixtures/constants"
 
-describe('Create board test scenarios', () => {
-   beforeEach(() => {
-     cy.visit('/')
-     loginPage.login(Cypress.env("validEmail"), Cypress.env("validPassword"))
-   })
+describe('Delete board test scenarios', () => {
 
-   let boardId = 0;
+	let boardId = null;
 
-    it('Add a board', () => {
+	beforeEach(() => {
+		cy.visit('/')
+		loginPage.login(Cypress.env("validEmail"), Cypress.env("validPassword"))
 
-        cy.intercept("POST", Cypress.env('apiUrl')+'/boards').as("newBoardData")
+		// Intercept the API request for creating a new board
+		cy.intercept("POST", `${Cypress.env('apiUrl')}/boards`)
+		.as("newBoardData")
 
-           //step 01
-           boards.addBoardTitle(constants.randomTitle)
-           boards.pageOneDot.should("have.class", "active")
-           boards.nextBtn.click()
+		// Create a new board and wait for the API response
+		boards.createNewBoard()
+		cy.wait('@newBoardData').then(result => {
+			expect(result.response.statusCode).to.equal(201)
+			boardId = result.response.body.id
+			cy.url().should('contain', `/boards/${boardId}`)
+		})
 
-           //step 02
-           boards.addBoardType()
-           boards.pageTwoDot.should("have.class", "active")
-           boards.nextBtn.click()
+	})
 
-           //step 03
-           boards.addBoardConfig()
-           boards.pageThrDot.should("have.class", "active")
-           boards.nextBtn.click()
+	it('Delete board', () => {
 
-           //step 04
-           boards.addBoardLogo(constants.imgUrl)
-           boards.pageFourDot.should("have.class", "active")
-           boards.nextBtn.click()
+		// Intercept the API request for deleting board
+		cy.intercept("DELETE", `${Cypress.env('apiUrl')}/boards/${boardId}`)
+        .as("newBoardDel")
 
-           //step 04
-           boards.pageFiveDot.should("have.class", "active")
-           boards.nextBtn.click()
-      
-       cy.wait('@newBoardData').then( result => {
-           expect(result.response.statusCode).to.equal(201)
-           boardId = result.response.body.id
-           cy.url().should('contain', '/boards'+`/${boardId}`)
-       })
+        // Delete a board and wait for the API response
+		cy.visit(`/boards/${boardId}`)
+		boards.deleteBoard()
 
-       
-    })
-
-
-    it('Delete board', () => {
-
-        cy.intercept("DELETE", Cypress.env('apiUrl')+'/boards'+`/${boardId}`).as("newBoardDel")
-
-            cy.visit(`/boards/${boardId}`)
-            loginPage.login(Cypress.env("validEmail"), Cypress.env("validPassword"))
-            cy.wait(5000)
-            boards.deleteBoard()
-            boards.boardsModal.click()
-    
-        cy.wait('@newBoardDel').then( result => {
-            expect(result.response.statusCode).to.equal(200)
-        })
-    })
-
-    it('Confirm that board is deleted', () => {
-
+		cy.wait('@newBoardDel').then(result => {
+			expect(result.response.statusCode).to.equal(200)
+			
+            // Verify that the new board doesn't exists in the All Boards section
             boards.myOrgBtn.click()
-            boards.boardsModal.click()
-            boards.allBoardsSection.find(`div[id="${boardId}"]`)
-            .should('not.exist')
-    })
+            boards.allBoardsSection
+                .find(`div[id="${boardId}"]`)
+                .should('not.exist')
+        })
+	})
 
 })
