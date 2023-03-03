@@ -68,7 +68,7 @@ class Boards {
 		return this.confirmModal.find('button').eq(-1)
 	}
 
-	// page 01 - board title
+	// modal page 01 - board title
 
 	get organizationSelect() {
 		return this.formModal.find('.vs-c-new-board-select')
@@ -86,13 +86,13 @@ class Boards {
 		return this.formModal.find('input[name="name"]')
 	}
 
-	// page 02 - board type
+	// modal page 02 - board type
 
 	selectBoardTypeRadio(i) {
 		return this.formModal.find('input[type="radio"]').eq(i).invoke("show")
 	}
 
-	// page 03 - board configuration
+	// modal page 03 - board configuration
 
 	selectConfigField(i) {
 		return this.formModal.find('input[type="text"]').eq(i)
@@ -106,7 +106,7 @@ class Boards {
 		return this.configFieldSelectMenu.find('li').eq(1)
 	}
 
-	// page 04 - board logo
+	// modal page 04 - board logo
 
 	get logoInputFile() {
 		return this.formModal.find('input[type="file"]').invoke('show')
@@ -137,9 +137,7 @@ class Boards {
 	}
 
 	selectBoardType() {
-		this.selectBoardTypeRadio(0).check({
-			force: true
-		})
+		this.selectBoardTypeRadio(0).check({force: true})
 
 		this.pageDot(1).should('have.class', 'active')
 		this.nextBtn.click()
@@ -147,19 +145,11 @@ class Boards {
 
 	selectBoardConfiguration() {
 
-		this.selectConfigField(0).click({
-			force: true
-		})
-		this.selectConfigFieldItem(1).click({
-			force: true
-		})
+		this.selectConfigField(0).click({force: true})
+		this.selectConfigFieldItem(1).click({force: true})
 
-		this.selectConfigField(1).click({
-			force: true
-		})
-		this.selectConfigFieldItem(1).click({
-			force: true
-		})
+		this.selectConfigField(1).click({force: true})
+		this.selectConfigFieldItem(1).click({force: true})
 
 		this.pageDot(2).should('have.class', 'active')
 		this.nextBtn.click()
@@ -178,9 +168,7 @@ class Boards {
 	finishBoardCreation() {
 
 		this.pageDot(4).should('have.class', 'active')
-		this.nextBtn.click({
-			force: true
-		})
+		this.nextBtn.click({force: true})
 	}
 
 	createNewBoard() {
