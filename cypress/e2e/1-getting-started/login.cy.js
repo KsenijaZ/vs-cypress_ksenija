@@ -1,6 +1,6 @@
 import { loginPage } from "../../pageObjects/loginPage"
 
-describe('login test scenarios', () => {
+describe('Login test scenario', () => {
 
    beforeEach(() => {
      cy.visit('/')
@@ -12,7 +12,7 @@ describe('login test scenarios', () => {
 
     it('Login with valid credentials', () => {
 
-        // Intercept the API request for creating a new board
+        // Intercept the API request for login with valid credentials
         cy.intercept("POST", `${Cypress.env('apiUrl')}/login`)
         .as('loginData')
 

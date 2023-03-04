@@ -1,7 +1,7 @@
 import { loginPage } from "../../pageObjects/loginPage"
 import { boards } from "../../pageObjects/boards"
 
-describe('Delete board test scenarios', () => {
+describe('Delete board test scenario', () => {
 
 	let boardId = null;
 
